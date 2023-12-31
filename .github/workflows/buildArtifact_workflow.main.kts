@@ -4,6 +4,7 @@
 
 import io.github.typesafegithub.workflows.actions.actions.CheckoutV4
 import io.github.typesafegithub.workflows.actions.actions.SetupJavaV4
+import io.github.typesafegithub.workflows.actions.actions.UploadArtifactV4
 import io.github.typesafegithub.workflows.domain.RunnerType.UbuntuLatest
 import io.github.typesafegithub.workflows.domain.triggers.Push
 import io.github.typesafegithub.workflows.dsl.workflow
@@ -26,5 +27,11 @@ workflow(
         )
         run(name = "Sync Gradle", command = "./gradlew tasks")
         run(name = "Build jar", command = "./gradlew clean build")
+        uses(
+            name = "Upload artifact",
+            action = UploadArtifactV4(
+                path = listOf("app/build/libs/app.jar")
+            )
+        )
     }
 }.writeToFile()
